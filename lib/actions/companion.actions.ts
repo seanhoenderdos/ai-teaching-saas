@@ -93,9 +93,23 @@ export const getRecentSessions = async (limit = 10) => {
 
   if (error) throw new Error(error.message);
 
-  return data
+  // Remove duplicates by creating a Map using companion id as key
+  const uniqueCompanions = new Map();
+  data
     .map(({ companions }) => companions)
-    .filter((companion) => companion !== null);
+    .filter((companion) => companion !== null)
+    .forEach((companion) => {
+      if (
+        companion &&
+        typeof companion === "object" &&
+        "id" in companion &&
+        !uniqueCompanions.has(companion.id)
+      ) {
+        uniqueCompanions.set(companion.id, companion);
+      }
+    });
+
+  return Array.from(uniqueCompanions.values());
 };
 
 export const getUserSessions = async (userId: string, limit = 10) => {
@@ -109,9 +123,23 @@ export const getUserSessions = async (userId: string, limit = 10) => {
 
   if (error) throw new Error(error.message);
 
-  return data
+  // Remove duplicates by creating a Map using companion id as key
+  const uniqueCompanions = new Map();
+  data
     .map(({ companions }) => companions)
-    .filter((companion) => companion !== null);
+    .filter((companion) => companion !== null)
+    .forEach((companion) => {
+      if (
+        companion &&
+        typeof companion === "object" &&
+        "id" in companion &&
+        !uniqueCompanions.has(companion.id)
+      ) {
+        uniqueCompanions.set(companion.id, companion);
+      }
+    });
+
+  return Array.from(uniqueCompanions.values());
 };
 
 export const getUserCompanions = async (userId: string) => {
